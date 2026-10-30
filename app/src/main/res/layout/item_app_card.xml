@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/cardContainer"
-    android:layout_width="220dp"
-    android:layout_height="120dp"
+    android:layout_width="240dp"
+    android:layout_height="135dp"
     android:layout_marginEnd="16dp"
     android:clickable="true"
     android:focusable="true"
@@ -15,10 +16,11 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_margin="2dp"
-        app:cardCornerRadius="14dp"
+        app:cardCornerRadius="12dp"
         app:cardElevation="0dp"
-        xmlns:app="http://schemas.android.com/apk/res-auto">
+        app:cardBackgroundColor="#141622">
 
+        <!-- Official Android TV 16:9 Leanback Banner -->
         <ImageView
             android:id="@+id/ivBanner"
             android:layout_width="match_parent"
@@ -26,14 +28,15 @@
             android:scaleType="centerCrop"
             android:contentDescription="@null" />
 
-        <!-- Fallback layout when custom banner is absent: shows icon and title centered -->
+        <!-- Fallback layout when app does not provide a 16:9 banner (e.g. sideloaded phone apps) -->
         <LinearLayout
             android:id="@+id/layoutFallback"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
             android:orientation="vertical"
-            android:background="#161822"
+            android:background="#1C1E2C"
+            android:padding="12dp"
             android:visibility="gone">
 
             <ImageView
@@ -48,8 +51,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:textColor="#FFFFFF"
-                android:textSize="14sp"
-                android:textStyle="bold" />
+                android:textSize="13sp"
+                android:textStyle="bold"
+                android:ellipsize="end"
+                android:maxLines="1" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 

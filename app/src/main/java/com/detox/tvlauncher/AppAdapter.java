@@ -43,11 +43,7 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> {
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         AppItem app = appList.get(position);
 
-        if (app.getBannerResId() != 0) {
-            holder.ivBanner.setVisibility(View.VISIBLE);
-            holder.layoutFallback.setVisibility(View.GONE);
-            holder.ivBanner.setImageResource(app.getBannerResId());
-        } else if (app.getBannerDrawable() != null) {
+        if (app.hasBanner()) {
             holder.ivBanner.setVisibility(View.VISIBLE);
             holder.layoutFallback.setVisibility(View.GONE);
             holder.ivBanner.setImageDrawable(app.getBannerDrawable());

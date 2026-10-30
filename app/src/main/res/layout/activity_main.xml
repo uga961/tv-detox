@@ -97,6 +97,7 @@
                 android:layout_width="18dp"
                 android:layout_height="18dp"
                 android:src="@drawable/ic_inputs"
+                android:tint="@color/text_white"
                 android:contentDescription="@string/pill_inputs" />
 
             <TextView
@@ -130,6 +131,7 @@
                 android:layout_width="18dp"
                 android:layout_height="18dp"
                 android:src="@drawable/ic_wifi"
+                android:tint="@color/text_white"
                 android:contentDescription="@string/pill_wifi" />
 
             <TextView
@@ -162,6 +164,7 @@
                 android:layout_width="18dp"
                 android:layout_height="18dp"
                 android:src="@drawable/ic_settings"
+                android:tint="@color/text_white"
                 android:contentDescription="@string/pill_settings" />
 
             <TextView
