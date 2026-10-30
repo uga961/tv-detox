@@ -1,0 +1,22 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="220dp"
+    android:height="120dp"
+    android:viewportWidth="220"
+    android:viewportHeight="120">
+    <!-- Card Background: Crisp Off-White -->
+    <path
+        android:fillColor="#F4F4F6"
+        android:pathData="M0,0h220v120h-220z" />
+    <!-- YouTube Red Rounded Pill Container -->
+    <path
+        android:fillColor="#FF0000"
+        android:pathData="M65,42h40a12,12 0 0,1 12,12v12a12,12 0 0,1 -12,12h-40a12,12 0 0,1 -12,-12v-12a12,12 0 0,1 12,-12z" />
+    <!-- White Play Triangle -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M80,50l14,10l-14,10z" />
+    <!-- "YouTube" Text Symbol in Black -->
+    <path
+        android:fillColor="#212121"
+        android:pathData="M125,50h6l4,14l4,-14h6l-7,20v8h-6v-8z" />
+</vector>

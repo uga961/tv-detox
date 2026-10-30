@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_launcher"
+    android:paddingStart="48dp"
+    android:paddingTop="36dp"
+    android:paddingEnd="48dp"
+    android:paddingBottom="36dp"
+    android:clipChildren="false"
+    android:clipToPadding="false">
+
+    <!-- Top Left Header: Greeting, Clock, Date -->
+    <LinearLayout
+        android:id="@+id/layoutHeader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tvGreeting"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/greeting_afternoon"
+            android:textColor="@color/text_greeting"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            android:letterSpacing="0.12" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tvClock"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/text_white"
+                android:textSize="40sp"
+                android:fontFamily="sans-serif-medium"
+                tools:text="1:13 PM" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="14dp"
+                android:layout_marginEnd="14dp"
+                android:text="|"
+                android:textColor="@color/text_divider"
+                android:textSize="32sp" />
+
+            <TextView
+                android:id="@+id/tvDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/text_date"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:letterSpacing="0.08"
+                tools:text="SATURDAY 17 OCTOBER" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- Top Right Action Pills: Inputs, Wi-Fi, Settings -->
+    <LinearLayout
+        android:id="@+id/layoutPills"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+
+        <!-- Inputs Pill -->
+        <LinearLayout
+            android:id="@+id/pillInputs"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_marginEnd="12dp"
+            android:background="@drawable/bg_pill_selector"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:paddingStart="16dp"
+            android:paddingEnd="18dp"
+            android:nextFocusDown="@id/rvApps">
+
+            <ImageView
+                android:id="@+id/ivInputsIcon"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:src="@drawable/ic_inputs"
+                android:contentDescription="@string/pill_inputs" />
+
+            <TextView
+                android:id="@+id/tvInputsText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="@string/pill_inputs"
+                android:textColor="@color/pill_text_color"
+                android:textSize="13sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <!-- Wi-Fi Pill -->
+        <LinearLayout
+            android:id="@+id/pillWifi"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_marginEnd="12dp"
+            android:background="@drawable/bg_pill_selector"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:paddingStart="16dp"
+            android:paddingEnd="18dp"
+            android:nextFocusDown="@id/rvApps">
+
+            <ImageView
+                android:id="@+id/ivWifiIcon"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:src="@drawable/ic_wifi"
+                android:contentDescription="@string/pill_wifi" />
+
+            <TextView
+                android:id="@+id/tvWifiText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="@string/pill_wifi"
+                android:textColor="@color/pill_text_color"
+                android:textSize="13sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <!-- Settings Pill -->
+        <LinearLayout
+            android:id="@+id/pillSettings"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:background="@drawable/bg_pill_selector"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:paddingStart="16dp"
+            android:paddingEnd="18dp"
+            android:nextFocusDown="@id/rvApps">
+
+            <ImageView
+                android:id="@+id/ivSettingsIcon"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:src="@drawable/ic_settings"
+                android:contentDescription="@string/pill_settings" />
+
+            <TextView
+                android:id="@+id/tvSettingsText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="@string/pill_settings"
+                android:textColor="@color/pill_text_color"
+                android:textSize="13sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- Center Focused Title -->
+    <TextView
+        android:id="@+id/tvFocusedTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/rvApps"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="16dp"
+        android:textColor="@color/text_white"
+        android:textSize="36sp"
+        android:textStyle="bold"
+        android:fontFamily="sans-serif-medium"
+        tools:text="Netflix" />
+
+    <!-- Bottom Apps Carousel -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvApps"
+        android:layout_width="match_parent"
+        android:layout_height="138dp"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        android:paddingTop="6dp"
+        android:paddingBottom="6dp"
+        android:paddingStart="4dp"
+        android:paddingEnd="4dp"
+        android:nextFocusUp="@id/pillInputs" />
+
+</RelativeLayout>

@@ -1,0 +1,23 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="220dp"
+    android:height="120dp"
+    android:viewportWidth="220"
+    android:viewportHeight="120">
+    <!-- Card Background: Sleek Translucent Graphite -->
+    <path
+        android:fillColor="#1E202C"
+        android:pathData="M0,0h220v120h-220z" />
+    <!-- 9-dot App Drawer Grid in Silver/White -->
+    <!-- Row 1 -->
+    <path android:fillColor="#FFFFFF" android:pathData="M95,45a4,4 0 1,1 8,0a4,4 0 1,1 -8,0z" />
+    <path android:fillColor="#FFFFFF" android:pathData="M106,45a4,4 0 1,1 8,0a4,4 0 1,1 -8,0z" />
+    <path android:fillColor="#FFFFFF" android:pathData="M117,45a4,4 0 1,1 8,0a4,4 0 1,1 -8,0z" />
+    <!-- Row 2 -->
+    <path android:fillColor="#FFFFFF" android:pathData="M95,56a4,4 0 1,1 8,0a4,4 0 1,1 -8,0z" />
+    <path android:fillColor="#FFFFFF" android:pathData="M106,56a4,4 0 1,1 8,0a4,4 0 1,1 -8,0z" />
+    <path android:fillColor="#FFFFFF" android:pathData="M117,56a4,4 0 1,1 8,0a4,4 0 1,1 -8,0z" />
+    <!-- Row 3 -->
+    <path android:fillColor="#FFFFFF" android:pathData="M95,67a4,4 0 1,1 8,0a4,4 0 1,1 -8,0z" />
+    <path android:fillColor="#FFFFFF" android:pathData="M106,67a4,4 0 1,1 8,0a4,4 0 1,1 -8,0z" />
+    <path android:fillColor="#FFFFFF" android:pathData="M117,67a4,4 0 1,1 8,0a4,4 0 1,1 -8,0z" />
+</vector>

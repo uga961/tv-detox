@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Background and Base Colors -->
+    <color name="bg_dark">#0A0A0F</color>
+    <color name="bg_glow_center">#330A0A</color>
+    <color name="bg_glow_outer">#06060A</color>
+
+    <!-- Text Colors -->
+    <color name="text_white">#FFFFFF</color>
+    <color name="text_greeting">#9EA2B0</color>
+    <color name="text_date">#B6BAC7</color>
+    <color name="text_divider">#4A4E5C</color>
+    <color name="text_focused_pill">#111116</color>
+
+    <!-- Pill Button Colors -->
+    <color name="pill_bg_normal">#24FFFFFF</color>
+    <color name="pill_stroke_normal">#33FFFFFF</color>
+    <color name="pill_bg_focused">#FFFFFF</color>
+    <color name="pill_stroke_focused">#FFFFFF</color>
+
+    <!-- Card Colors -->
+    <color name="card_stroke_normal">#1FFFFFFF</color>
+    <color name="card_stroke_focused">#FFFFFF</color>
+    <color name="card_glow_focused">#60FFFFFF</color>
+</resources>

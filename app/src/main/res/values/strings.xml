@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">TV Detox</string>
+    <string name="greeting_morning">GOOD MORNING</string>
+    <string name="greeting_afternoon">GOOD AFTERNOON</string>
+    <string name="greeting_evening">GOOD EVENING</string>
+    <string name="greeting_night">GOOD NIGHT</string>
+
+    <string name="pill_inputs">Inputs</string>
+    <string name="pill_wifi">Wi-Fi</string>
+    <string name="pill_settings">Settings</string>
+    <string name="all_apps">All Apps</string>
+</resources>

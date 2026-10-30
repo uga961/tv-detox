@@ -1,0 +1,27 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="220dp"
+    android:height="120dp"
+    android:viewportWidth="220"
+    android:viewportHeight="120">
+    <!-- Card Background: Signature Prime Video Cyan Blue #00A8E1 -->
+    <path
+        android:fillColor="#00A8E1"
+        android:pathData="M0,0h220v120h-220z" />
+    <!-- Prime Video "prime video" wordmark & smile arrow in White -->
+    <!-- 'p' -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M65,48h6v24h-6zM71,48a8,8 0 0,1 8,8a8,8 0 0,1 -8,8h-6v-16z" />
+    <!-- 'v' -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M110,48l6,24h5l6,-24h-6l-3,14l-3,-14z" />
+    <!-- Smile Smile Curve -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M68,82 Q110,95 152,82 Q110,90 68,82 Z" />
+    <!-- Arrowhead -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M148,80l6,2l-3,5z" />
+</vector>

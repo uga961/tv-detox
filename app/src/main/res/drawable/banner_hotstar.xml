@@ -1,0 +1,23 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="220dp"
+    android:height="120dp"
+    android:viewportWidth="220"
+    android:viewportHeight="120">
+    <!-- Card Background: Deep Cosmic Indigo -->
+    <path
+        android:fillColor="#0D1127"
+        android:pathData="M0,0h220v120h-220z" />
+    <!-- Gradient accent overlay -->
+    <path
+        android:fillColor="#15204A"
+        android:pathData="M0,60h220v60h-220z" />
+    <!-- Hotstar Radiant Star in White / Cyan -->
+    <!-- 8-pointed spark star -->
+    <path
+        android:fillColor="#00D2F4"
+        android:pathData="M65,60L72,40L75,56L91,52L78,63L88,77L73,68L68,84L65,68L50,72L61,61L48,49L64,55Z" />
+    <!-- Hotstar "Hotstar" stylized text -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M100,50h6v8h8v-8h6v20h-6v-7h-8v7h-6zM126,56a7,7 0 1,1 14,0a7,7 0 1,1 -14,0z" />
+</vector>
