@@ -2,9 +2,9 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/cardContainer"
-    android:layout_width="240dp"
-    android:layout_height="135dp"
-    android:layout_marginEnd="16dp"
+    android:layout_width="190dp"
+    android:layout_height="107dp"
+    android:layout_marginEnd="14dp"
     android:clickable="true"
     android:focusable="true"
     android:focusableInTouchMode="true"
@@ -16,42 +16,43 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_margin="2dp"
-        app:cardCornerRadius="12dp"
+        app:cardCornerRadius="10dp"
         app:cardElevation="0dp"
-        app:cardBackgroundColor="#141622">
+        app:cardBackgroundColor="#12141F">
 
         <!-- Official Android TV 16:9 Leanback Banner -->
         <ImageView
             android:id="@+id/ivBanner"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scaleType="centerCrop"
+            android:scaleType="fitCenter"
+            android:adjustViewBounds="true"
             android:contentDescription="@null" />
 
-        <!-- Fallback layout when app does not provide a 16:9 banner (e.g. sideloaded phone apps) -->
+        <!-- Fallback layout when app does not provide a 16:9 banner -->
         <LinearLayout
             android:id="@+id/layoutFallback"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
             android:orientation="vertical"
-            android:background="#1C1E2C"
-            android:padding="12dp"
+            android:background="#151724"
+            android:padding="8dp"
             android:visibility="gone">
 
             <ImageView
                 android:id="@+id/ivIcon"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:contentDescription="@null" />
 
             <TextView
                 android:id="@+id/tvTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="6dp"
                 android:textColor="#FFFFFF"
-                android:textSize="13sp"
+                android:textSize="12sp"
                 android:textStyle="bold"
                 android:ellipsize="end"
                 android:maxLines="1" />

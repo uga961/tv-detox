@@ -234,6 +234,10 @@ public class MainActivity extends AppCompatActivity implements AppAdapter.OnAppF
         dialog.setContentView(R.layout.dialog_inputs);
         if (dialog.getWindow() != null) {
             dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            dialog.getWindow().setLayout(
+                (int) (getResources().getDisplayMetrics().density * 360),
+                ViewGroup.LayoutParams.WRAP_CONTENT
+            );
         }
 
         LinearLayout layoutChoices = dialog.findViewById(R.id.layoutInputChoices);
@@ -288,7 +292,7 @@ public class MainActivity extends AppCompatActivity implements AppAdapter.OnAppF
                 dialog.dismiss();
                 switchToTvInput(inputId);
             });
-            setupPillFocusAnimation(itemView);
+            // Note: No scale animation here to prevent edge clipping in the dialog!
             layoutChoices.addView(itemView);
         }
 
@@ -429,9 +433,9 @@ public class MainActivity extends AppCompatActivity implements AppAdapter.OnAppF
         orderedList.addAll(remainingApps);
 
         // Include "All Apps" shortcut if many apps
-        if (orderedList.size() > 6) {
-            Drawable gridIcon = getDrawable(R.drawable.banner_all_apps);
-            orderedList.add(new AppItem("All Applications", gridIcon, true));
+        if (orderedList.size() > 5) {
+            Drawable gridBanner = getDrawable(R.drawable.banner_all_apps);
+            orderedList.add(new AppItem("All Applications", gridBanner, null, true));
         }
 
         displayedApps.clear();

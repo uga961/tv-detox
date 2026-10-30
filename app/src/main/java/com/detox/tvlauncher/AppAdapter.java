@@ -1,5 +1,6 @@
 package com.detox.tvlauncher;
 
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -58,15 +59,28 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> {
 
         holder.itemView.setOnFocusChangeListener((v, hasFocus) -> {
             if (hasFocus) {
-                v.animate().scaleX(1.08f).scaleY(1.08f).setDuration(120).start();
-                v.setElevation(10f);
+                v.animate().scaleX(1.05f).scaleY(1.05f).setDuration(100).start();
+                v.setElevation(8f);
                 if (focusListener != null) {
                     focusListener.onAppFocused(app);
                 }
             } else {
-                v.animate().scaleX(1.0f).scaleY(1.0f).setDuration(120).start();
+                v.animate().scaleX(1.0f).scaleY(1.0f).setDuration(100).start();
                 v.setElevation(0f);
             }
+        });
+
+        // Prevent focus from jumping to top pills when pressing RIGHT at the end of the carousel
+        holder.itemView.setOnKeyListener((v, keyCode, event) -> {
+            if (event.getAction() == KeyEvent.ACTION_DOWN) {
+                if (keyCode == KeyEvent.KEYCODE_DPAD_RIGHT && holder.getAdapterPosition() == getItemCount() - 1) {
+                    return true; // Consume event: keep focus on the last card!
+                }
+                if (keyCode == KeyEvent.KEYCODE_DPAD_LEFT && holder.getAdapterPosition() == 0) {
+                    return true; // Keep focus on the first card
+                }
+            }
+            return false;
         });
 
         holder.itemView.setOnClickListener(v -> {
