@@ -5,23 +5,35 @@ import android.graphics.drawable.Drawable;
 public class AppItem {
     private final String packageName;
     private final String title;
-    private final int bannerResId;
-    private Drawable icon;
+    private int bannerResId;
+    private Drawable bannerDrawable;
+    private Drawable iconDrawable;
     private final boolean isAllAppsAction;
 
+    // Constructor for curated built-in banners (Netflix, Prime, YouTube, Hotstar, FanCode, PlayStore, etc.)
+    public AppItem(String packageName, String title, int bannerResId) {
+        this.packageName = packageName;
+        this.title = title;
+        this.bannerResId = bannerResId;
+        this.isAllAppsAction = false;
+    }
+
+    // Constructor for dynamically discovered apps
+    public AppItem(String packageName, String title, Drawable bannerDrawable, Drawable iconDrawable) {
+        this.packageName = packageName;
+        this.title = title;
+        this.bannerResId = 0;
+        this.bannerDrawable = bannerDrawable;
+        this.iconDrawable = iconDrawable;
+        this.isAllAppsAction = false;
+    }
+
+    // Constructor for special actions (e.g. All Apps button)
     public AppItem(String packageName, String title, int bannerResId, boolean isAllAppsAction) {
         this.packageName = packageName;
         this.title = title;
         this.bannerResId = bannerResId;
         this.isAllAppsAction = isAllAppsAction;
-    }
-
-    public AppItem(String packageName, String title, Drawable icon) {
-        this.packageName = packageName;
-        this.title = title;
-        this.bannerResId = 0;
-        this.icon = icon;
-        this.isAllAppsAction = false;
     }
 
     public String getPackageName() {
@@ -36,16 +48,20 @@ public class AppItem {
         return bannerResId;
     }
 
-    public Drawable getIcon() {
-        return icon;
+    public void setBannerResId(int bannerResId) {
+        this.bannerResId = bannerResId;
     }
 
-    public void setIcon(Drawable icon) {
-        this.icon = icon;
+    public Drawable getBannerDrawable() {
+        return bannerDrawable;
+    }
+
+    public Drawable getIconDrawable() {
+        return iconDrawable;
     }
 
     public boolean hasCustomBanner() {
-        return bannerResId != 0;
+        return bannerResId != 0 || bannerDrawable != null;
     }
 
     public boolean isAllAppsAction() {

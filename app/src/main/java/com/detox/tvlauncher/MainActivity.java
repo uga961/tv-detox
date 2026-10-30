@@ -9,6 +9,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.wifi.WifiInfo;
@@ -34,9 +35,15 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
 
 public class MainActivity extends AppCompatActivity implements AppAdapter.OnAppFocusListener, AppAdapter.OnAppClickListener {
 
@@ -52,10 +59,33 @@ public class MainActivity extends AppCompatActivity implements AppAdapter.OnAppF
 
     private RecyclerView rvApps;
     private AppAdapter appAdapter;
-    private final List<AppItem> featuredApps = new ArrayList<>();
+    private final List<AppItem> displayedApps = new ArrayList<>();
 
     private BroadcastReceiver timeReceiver;
     private BroadcastReceiver networkReceiver;
+    private BroadcastReceiver packageReceiver;
+
+    // Curated high-resolution banners for well-known streaming services and Google Play Store
+    private static final Map<String, Integer> CURATED_BANNERS = new HashMap<>();
+    static {
+        CURATED_BANNERS.put("com.netflix.ninja", R.drawable.banner_netflix);
+        CURATED_BANNERS.put("com.amazon.amazonvideo.livingroom", R.drawable.banner_prime);
+        CURATED_BANNERS.put("com.google.android.youtube.tv", R.drawable.banner_youtube);
+        CURATED_BANNERS.put("in.startv.hotstar", R.drawable.banner_hotstar);
+        CURATED_BANNERS.put("com.fancode.tv", R.drawable.banner_fancode);
+        CURATED_BANNERS.put("com.android.vending", R.drawable.banner_playstore);
+    }
+
+    // Preferred display order for prominent apps
+    private static final List<String> PREFERRED_ORDER = new ArrayList<>();
+    static {
+        PREFERRED_ORDER.add("com.netflix.ninja");
+        PREFERRED_ORDER.add("com.amazon.amazonvideo.livingroom");
+        PREFERRED_ORDER.add("com.google.android.youtube.tv");
+        PREFERRED_ORDER.add("in.startv.hotstar");
+        PREFERRED_ORDER.add("com.fancode.tv");
+        PREFERRED_ORDER.add("com.android.vending"); // Google Play Store
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,8 +95,17 @@ public class MainActivity extends AppCompatActivity implements AppAdapter.OnAppF
         initViews();
         setupDateTime();
         setupPills();
-        loadFeaturedApps();
         setupAppsRecyclerView();
+        loadInstalledApps();
+        setupPackageReceiver();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // Dynamically refresh installed apps when returning from Play Store or Settings
+        loadInstalledApps();
+        updateWifiStatus();
     }
 
     private void initViews() {
@@ -147,6 +186,22 @@ public class MainActivity extends AppCompatActivity implements AppAdapter.OnAppF
         registerReceiver(networkReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
     }
 
+    private void setupPackageReceiver() {
+        packageReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                // Instantly re-query and update UI whenever an app is installed, updated, or removed
+                loadInstalledApps();
+            }
+        };
+        IntentFilter pkgFilter = new IntentFilter();
+        pkgFilter.addAction(Intent.ACTION_PACKAGE_ADDED);
+        pkgFilter.addAction(Intent.ACTION_PACKAGE_REMOVED);
+        pkgFilter.addAction(Intent.ACTION_PACKAGE_REPLACED);
+        pkgFilter.addDataScheme("package");
+        registerReceiver(packageReceiver, pkgFilter);
+    }
+
     private void updateWifiStatus() {
         try {
             ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -178,7 +233,7 @@ public class MainActivity extends AppCompatActivity implements AppAdapter.OnAppF
     }
 
     private void openInputs() {
-        // Try Xiaomi DroidLogic TV Input Service first
+        // 1. Try Xiaomi DroidLogic TV Input Service
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setClassName("com.droidlogic.droidlivetv", "com.droidlogic.droidlivetv.DroidLiveTv");
         try {
@@ -186,14 +241,14 @@ public class MainActivity extends AppCompatActivity implements AppAdapter.OnAppF
             return;
         } catch (Exception ignored) {}
 
-        // Fallback to Live TV or TV Inputs intent
+        // 2. Try Standard Android TV Inputs intent
         try {
             Intent liveTv = new Intent("android.media.tv.action.VIEW_INPUTS");
             startActivity(liveTv);
             return;
         } catch (Exception ignored) {}
 
-        // Fallback to Settings Inputs
+        // 3. Fallback to TV Input Settings
         try {
             Intent settingsInputs = new Intent(Settings.ACTION_INPUT_METHOD_SETTINGS);
             startActivity(settingsInputs);
@@ -218,38 +273,120 @@ public class MainActivity extends AppCompatActivity implements AppAdapter.OnAppF
         }
     }
 
-    private void loadFeaturedApps() {
-        featuredApps.clear();
+    /**
+     * Dynamically queries PackageManager for ALL installed launchable apps on the TV.
+     * Ensures newly installed apps, sideloaded apps, and Google Play Store always appear!
+     */
+    private void loadInstalledApps() {
+        PackageManager pm = getPackageManager();
+        String currentPkg = getPackageName();
 
-        // 1. Netflix
-        featuredApps.add(new AppItem("com.netflix.ninja", "Netflix", R.drawable.banner_netflix, false));
+        // 1. Query Android TV Leanback Apps
+        Intent leanbackIntent = new Intent(Intent.ACTION_MAIN, null);
+        leanbackIntent.addCategory(Intent.CATEGORY_LEANBACK_LAUNCHER);
+        List<ResolveInfo> leanbackApps = pm.queryIntentActivities(leanbackIntent, 0);
 
-        // 2. Amazon Prime Video
-        featuredApps.add(new AppItem("com.amazon.amazonvideo.livingroom", "Prime Video", R.drawable.banner_prime, false));
+        // 2. Query Standard Android Launchable Apps (for apps without Leanback category or sideloaded)
+        Intent standardIntent = new Intent(Intent.ACTION_MAIN, null);
+        standardIntent.addCategory(Intent.CATEGORY_LAUNCHER);
+        List<ResolveInfo> standardApps = pm.queryIntentActivities(standardIntent, 0);
 
-        // 3. YouTube
-        featuredApps.add(new AppItem("com.google.android.youtube.tv", "YouTube", R.drawable.banner_youtube, false));
+        // Deduplicate apps by package name
+        Map<String, ResolveInfo> appMap = new HashMap<>();
+        for (ResolveInfo ri : leanbackApps) {
+            if (ri.activityInfo != null && !currentPkg.equals(ri.activityInfo.packageName)) {
+                appMap.put(ri.activityInfo.packageName, ri);
+            }
+        }
+        for (ResolveInfo ri : standardApps) {
+            if (ri.activityInfo != null && !currentPkg.equals(ri.activityInfo.packageName)) {
+                if (!appMap.containsKey(ri.activityInfo.packageName)) {
+                    appMap.put(ri.activityInfo.packageName, ri);
+                }
+            }
+        }
 
-        // 4. Disney+ Hotstar
-        featuredApps.add(new AppItem("in.startv.hotstar", "Disney+ Hotstar", R.drawable.banner_hotstar, false));
+        // Always check for Google Play Store directly if not captured
+        if (!appMap.containsKey("com.android.vending")) {
+            Intent playStoreIntent = pm.getLaunchIntentForPackage("com.android.vending");
+            if (playStoreIntent != null) {
+                List<ResolveInfo> playInfos = pm.queryIntentActivities(playStoreIntent, 0);
+                if (!playInfos.isEmpty()) {
+                    appMap.put("com.android.vending", playInfos.get(0));
+                }
+            }
+        }
 
-        // 5. FanCode
-        featuredApps.add(new AppItem("com.fancode.tv", "FanCode", R.drawable.banner_fancode, false));
+        List<AppItem> orderedList = new ArrayList<>();
+        Set<String> processedPkgs = new HashSet<>();
 
-        // 6. All Apps Action Card
-        featuredApps.add(new AppItem("", "All Applications", R.drawable.banner_all_apps, true));
+        // A. Add Preferred Apps First (Netflix, Prime, YouTube, Hotstar, FanCode, PlayStore) if installed
+        for (String preferredPkg : PREFERRED_ORDER) {
+            if (appMap.containsKey(preferredPkg)) {
+                ResolveInfo ri = appMap.get(preferredPkg);
+                String label = ri.loadLabel(pm).toString();
+                int curatedBanner = CURATED_BANNERS.containsKey(preferredPkg) ? CURATED_BANNERS.get(preferredPkg) : 0;
+
+                Drawable tvBanner = ri.activityInfo.loadBanner(pm);
+                Drawable icon = ri.activityInfo.loadIcon(pm);
+
+                AppItem item = new AppItem(preferredPkg, label, curatedBanner);
+                if (curatedBanner == 0) {
+                    item = new AppItem(preferredPkg, label, tvBanner, icon);
+                }
+                orderedList.add(item);
+                processedPkgs.add(preferredPkg);
+            }
+        }
+
+        // B. Add all remaining installed apps (dynamically discovered!)
+        List<AppItem> remainingApps = new ArrayList<>();
+        for (Map.Entry<String, ResolveInfo> entry : appMap.entrySet()) {
+            String pkg = entry.getKey();
+            if (!processedPkgs.contains(pkg)) {
+                ResolveInfo ri = entry.getValue();
+                String label = ri.loadLabel(pm).toString();
+                Drawable tvBanner = ri.activityInfo.loadBanner(pm);
+                Drawable icon = ri.activityInfo.loadIcon(pm);
+
+                // Check if we happen to have a curated banner for it
+                int curatedBanner = CURATED_BANNERS.containsKey(pkg) ? CURATED_BANNERS.get(pkg) : 0;
+                AppItem item;
+                if (curatedBanner != 0) {
+                    item = new AppItem(pkg, label, curatedBanner);
+                } else {
+                    item = new AppItem(pkg, label, tvBanner, icon);
+                }
+                remainingApps.add(item);
+            }
+        }
+
+        // Sort remaining apps alphabetically by title
+        Collections.sort(remainingApps, Comparator.comparing(a -> a.getTitle().toLowerCase(Locale.getDefault())));
+        orderedList.addAll(remainingApps);
+
+        // C. If user has lots of apps, also include the "All Applications" grid card
+        if (orderedList.size() > 6) {
+            orderedList.add(new AppItem("", "All Applications", R.drawable.banner_all_apps, true));
+        }
+
+        displayedApps.clear();
+        displayedApps.addAll(orderedList);
+
+        if (appAdapter != null) {
+            appAdapter.notifyDataSetChanged();
+        }
+
+        if (!displayedApps.isEmpty() && (tvFocusedTitle.getText() == null || tvFocusedTitle.getText().toString().isEmpty())) {
+            tvFocusedTitle.setText(displayedApps.get(0).getTitle());
+        }
     }
 
     private void setupAppsRecyclerView() {
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         rvApps.setLayoutManager(layoutManager);
-        appAdapter = new AppAdapter(featuredApps, this, this);
+        appAdapter = new AppAdapter(displayedApps, this, this);
         rvApps.setAdapter(appAdapter);
-
-        // Default title to the first app
-        if (!featuredApps.isEmpty()) {
-            tvFocusedTitle.setText(featuredApps.get(0).getTitle());
-        }
 
         // Auto-focus the first app on boot
         rvApps.post(() -> {
@@ -296,8 +433,8 @@ public class MainActivity extends AppCompatActivity implements AppAdapter.OnAppF
         if (dialog.getWindow() != null) {
             dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
             dialog.getWindow().setLayout(
-                (int) (getResources().getDisplayMetrics().widthPixels * 0.7),
-                (int) (getResources().getDisplayMetrics().heightPixels * 0.7)
+                (int) (getResources().getDisplayMetrics().widthPixels * 0.75),
+                (int) (getResources().getDisplayMetrics().heightPixels * 0.75)
             );
         }
 
@@ -305,26 +442,9 @@ public class MainActivity extends AppCompatActivity implements AppAdapter.OnAppF
         rvGrid.setLayoutManager(new GridLayoutManager(this, 4));
 
         PackageManager pm = getPackageManager();
-        Intent mainIntent = new Intent(Intent.ACTION_MAIN, null);
-        mainIntent.addCategory(Intent.CATEGORY_LEANBACK_LAUNCHER);
-
-        List<ResolveInfo> resolveInfos = pm.queryIntentActivities(mainIntent, 0);
-        if (resolveInfos.isEmpty()) {
-            mainIntent = new Intent(Intent.ACTION_MAIN, null);
-            mainIntent.addCategory(Intent.CATEGORY_LAUNCHER);
-            resolveInfos = pm.queryIntentActivities(mainIntent, 0);
-        }
-
-        List<AppItem> allInstalled = new ArrayList<>();
-        String currentPkg = getPackageName();
-
-        for (ResolveInfo ri : resolveInfos) {
-            if (ri.activityInfo != null && !currentPkg.equals(ri.activityInfo.packageName)) {
-                String pkg = ri.activityInfo.packageName;
-                String label = ri.loadLabel(pm).toString();
-                allInstalled.add(new AppItem(pkg, label, ri.loadIcon(pm)));
-            }
-        }
+        List<AppItem> allInstalled = new ArrayList<>(displayedApps);
+        // Exclude the 'All Applications' action card itself from the modal
+        allInstalled.removeIf(AppItem::isAllAppsAction);
 
         rvGrid.setAdapter(new RecyclerView.Adapter<GridAppViewHolder>() {
             @NonNull
@@ -338,7 +458,14 @@ public class MainActivity extends AppCompatActivity implements AppAdapter.OnAppF
             public void onBindViewHolder(@NonNull GridAppViewHolder holder, int position) {
                 AppItem item = allInstalled.get(position);
                 holder.tvTitle.setText(item.getTitle());
-                holder.ivIcon.setImageDrawable(item.getIcon());
+                if (item.getIconDrawable() != null) {
+                    holder.ivIcon.setImageDrawable(item.getIconDrawable());
+                } else if (item.getBannerDrawable() != null) {
+                    holder.ivIcon.setImageDrawable(item.getBannerDrawable());
+                } else if (item.getBannerResId() != 0) {
+                    holder.ivIcon.setImageResource(item.getBannerResId());
+                }
+
                 holder.itemView.setOnClickListener(v -> {
                     dialog.dismiss();
                     Intent launch = pm.getLeanbackLaunchIntentForPackage(item.getPackageName());
@@ -370,7 +497,7 @@ public class MainActivity extends AppCompatActivity implements AppAdapter.OnAppF
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            // Do not exit home launcher on back press
+            // Keep user on the home screen rather than killing the launcher
             return true;
         }
         return super.onKeyDown(keyCode, event);
@@ -384,6 +511,9 @@ public class MainActivity extends AppCompatActivity implements AppAdapter.OnAppF
         }
         if (networkReceiver != null) {
             try { unregisterReceiver(networkReceiver); } catch (Exception ignored) {}
+        }
+        if (packageReceiver != null) {
+            try { unregisterReceiver(packageReceiver); } catch (Exception ignored) {}
         }
     }
 }

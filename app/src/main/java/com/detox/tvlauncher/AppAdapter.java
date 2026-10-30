@@ -43,15 +43,19 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> {
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         AppItem app = appList.get(position);
 
-        if (app.hasCustomBanner()) {
+        if (app.getBannerResId() != 0) {
             holder.ivBanner.setVisibility(View.VISIBLE);
             holder.layoutFallback.setVisibility(View.GONE);
             holder.ivBanner.setImageResource(app.getBannerResId());
+        } else if (app.getBannerDrawable() != null) {
+            holder.ivBanner.setVisibility(View.VISIBLE);
+            holder.layoutFallback.setVisibility(View.GONE);
+            holder.ivBanner.setImageDrawable(app.getBannerDrawable());
         } else {
             holder.ivBanner.setVisibility(View.GONE);
             holder.layoutFallback.setVisibility(View.VISIBLE);
-            if (app.getIcon() != null) {
-                holder.ivIcon.setImageDrawable(app.getIcon());
+            if (app.getIconDrawable() != null) {
+                holder.ivIcon.setImageDrawable(app.getIconDrawable());
             }
             holder.tvTitle.setText(app.getTitle());
         }

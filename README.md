@@ -17,8 +17,13 @@
   - **Wi-Fi:** Displays connected Wi-Fi network name (SSID) and opens network settings on click.
   - **Settings:** One-click shortcut to TV system settings.
 - **Dynamic App Title:** Displays the currently focused application name in large, bold typography.
+- **Dynamic App Discovery & Real-Time Auto-Refresh:**
+  - Automatically queries the Android system for **ALL** installed TV and sideloaded applications.
+  - Newly installed apps from the Google Play Store appear instantly without needing a TV restart.
+  - Dedicated custom card for **Google Play Store** (`com.android.vending`) so you can download apps with one click.
 - **Instant-Response App Carousel:**
-  - High-resolution, rounded cards for your essential daily apps (**Netflix**, **Amazon Prime Video**, **YouTube**, **Disney+ Hotstar**, **FanCode**).
+  - High-resolution, rounded cards for your essential daily apps (**Netflix**, **Amazon Prime Video**, **YouTube**, **Disney+ Hotstar**, **FanCode**, **Google Play Store**).
+  - Automatically displays official 16:9 Leanback banners for any other installed app (e.g., Spotify, VLC, JioCinema, SonyLIV, Zee5, etc.).
   - **All Applications (+):** Built-in launcher grid to access any other installed TV app without cluttering the main screen.
 - **Ultra-Low Memory Footprint:**
   - **APK Size:** Only ~3.2 MB.
