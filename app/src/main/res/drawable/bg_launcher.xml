@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<shape xmlns:android="http://schemas.android.com/apk/res/android"
-    android:shape="rectangle">
-    <gradient
-        android:type="linear"
-        android:angle="270"
-        android:startColor="#11131F"
-        android:centerColor="#0A0B11"
-        android:endColor="#050609" />
-</shape>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:drawable="@drawable/bg_wallpaper" />
+    <item>
+        <shape android:shape="rectangle">
+            <gradient
+                android:type="linear"
+                android:angle="270"
+                android:startColor="#80060810"
+                android:centerColor="#33060810"
+                android:endColor="#E6040508" />
+        </shape>
+    </item>
+</layer-list>
