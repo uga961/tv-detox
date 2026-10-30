@@ -17,10 +17,10 @@ public class AppItem {
         this.isAllAppsAction = false;
     }
 
-    public AppItem(String title, Drawable bannerDrawable, Drawable iconDrawable, boolean isAllAppsAction) {
+    public AppItem(String title, Drawable iconDrawable, boolean isAllAppsAction) {
         this.packageName = "";
         this.title = title;
-        this.bannerDrawable = bannerDrawable;
+        this.bannerDrawable = null;
         this.iconDrawable = iconDrawable;
         this.isAllAppsAction = isAllAppsAction;
     }

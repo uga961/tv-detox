@@ -29,30 +29,32 @@
             android:adjustViewBounds="true"
             android:contentDescription="@null" />
 
-        <!-- Fallback layout when app does not provide a 16:9 banner -->
+        <!-- Card Layout for apps without banners and All Apps -->
         <LinearLayout
             android:id="@+id/layoutFallback"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
             android:orientation="vertical"
-            android:background="#151724"
+            android:background="#161826"
             android:padding="8dp"
             android:visibility="gone">
 
             <ImageView
                 android:id="@+id/ivIcon"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:tint="#FFFFFF"
                 android:contentDescription="@null" />
 
             <TextView
                 android:id="@+id/tvTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="6dp"
+                android:layout_marginTop="8dp"
                 android:textColor="#FFFFFF"
-                android:textSize="12sp"
+                android:textSize="13sp"
+                android:fontFamily="sans-serif-medium"
                 android:textStyle="bold"
                 android:ellipsize="end"
                 android:maxLines="1" />

@@ -194,7 +194,7 @@
         tools:text="Netflix" />
 
     <!-- Bottom Apps Carousel -->
-    <androidx.recyclerview.widget.RecyclerView
+    <com.detox.tvlauncher.TvHorizontalRecyclerView
         android:id="@+id/rvApps"
         android:layout_width="match_parent"
         android:layout_height="122dp"

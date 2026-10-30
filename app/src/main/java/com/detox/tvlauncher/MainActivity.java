@@ -432,10 +432,10 @@ public class MainActivity extends AppCompatActivity implements AppAdapter.OnAppF
         Collections.sort(remainingApps, Comparator.comparing(a -> a.getTitle().toLowerCase(Locale.getDefault())));
         orderedList.addAll(remainingApps);
 
-        // Include "All Apps" shortcut if many apps
+        // Include clean "All Apps" shortcut
         if (orderedList.size() > 5) {
-            Drawable gridBanner = getDrawable(R.drawable.banner_all_apps);
-            orderedList.add(new AppItem("All Applications", gridBanner, null, true));
+            Drawable gridIcon = getDrawable(R.drawable.ic_apps_grid);
+            orderedList.add(new AppItem("All Apps", gridIcon, true));
         }
 
         displayedApps.clear();
