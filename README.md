@@ -1,4 +1,4 @@
-# [Project Retried] TV Detox Launcher 📺⚡
+# [Project Retired] TV Detox Launcher 📺⚡
 
 > A clean, ultra-lightweight, and lightning-fast minimalist launcher built specifically for Android TV and memory-constrained devices (such as 1GB RAM Mi TVs, Xiaomi TV Sticks, Chromecast with Google TV, and generic ATV boxes).
 
